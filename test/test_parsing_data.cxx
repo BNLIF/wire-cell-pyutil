@@ -42,20 +42,20 @@ int main(int argc, char *argv[])
     // input data
     typedef int VType;
     // std::vector<VType> input = {44, 43};
-    std::vector<VType> input = {atoi(argv[3]), atoi(argv[4]), atoi(argv[5])};
+    std::vector<VType> input = {atoi(argv[3]), atoi(argv[4])};
     std::cout << "C++ input: ";
     print<VType>(input);
 
     if (PyCallable_Check(pFunc)) 
     {
-        auto pData = PyBytes_FromStringAndSize( (const char*)input.data(), input.size()*sizeof(VType) );
-        Debug(pData);
-        assert(PyBytes_Check( pData )!=0);
-            
+        size_t input_size = input.size()*sizeof(VType);
+        auto pData = PyBytes_FromStringAndSize( (const char*)input.data(), input_size);
+        assert(PyBytes_Check(pData)== true);
+        
+        std::cout << std::endl; // TODO: this is somehow needed to avoid seg fault
         pValue = PyObject_CallFunctionObjArgs(pFunc, pData);
 
         size_t ret_size = PyBytes_Size(pValue);
-        Debug(ret_size);
         std::vector<VType> ret;
         ret.resize(ret_size/sizeof(VType));
         memcpy((char*)ret.data(), (char*)PyBytes_AsString(pValue), ret_size );
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
         if (pValue != NULL) 
         {
-            printf("Return of call :\n");
+            printf("Return of call: ");
             print<VType>(ret);
             Py_DECREF(pValue);
         }
