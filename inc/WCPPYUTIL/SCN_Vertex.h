@@ -9,6 +9,7 @@ namespace WCPPYUTIL {
 #define FLOAT float
 std::vector<FLOAT> SCN_Vertex(const std::string &module,
                               const std::string &function,
+                              const std::string &weights,
                               const std::vector<FLOAT> &x,
                               const std::vector<FLOAT> &y,
                               const std::vector<FLOAT> &z,

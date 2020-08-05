@@ -19,6 +19,7 @@ namespace WCPPYUTIL {
 #define FLOAT float
 std::vector<FLOAT> SCN_Vertex(const std::string &module,
                               const std::string &function,
+                              const std::string &weights,
                               const std::vector<FLOAT> &x,
                               const std::vector<FLOAT> &y,
                               const std::vector<FLOAT> &z,
@@ -26,6 +27,7 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
   DebugInf("SCN_Vertex: start");
   DebugVar(module);
   DebugVar(function);
+  DebugVar(weights);
   print<FLOAT>(x);
   print<FLOAT>(y);
   print<FLOAT>(z);
@@ -36,13 +38,16 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
     throw std::runtime_error("input size unmatch");
   }
 
-  PyObject *pName, *pModule, *pDict, *pFunc, *pValue;
+  PyObject *pName, *pWeights, *pModule, *pDict, *pFunc, *pValue;
 
   // Initialize the Python Interpreter
   Py_Initialize();
 
   // Build the name object
   pName = PyString_FromString(module.c_str());
+
+  // weight path, needs to dec ref
+  pWeights = PyString_FromString(weights.c_str());
 
   // Load the module object
   pModule = PyImport_Import(pName);
@@ -78,7 +83,7 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
 
   DebugInf("PyObject_CallFunctionObjArgs: start");
   // std::cout << std::endl;  // TODO: this is somehow needed to avoid seg fault
-  pValue = PyObject_CallFunctionObjArgs(pFunc, pX, pY, pZ, pQ, NULL);
+  pValue = PyObject_CallFunctionObjArgs(pFunc, pWeights, pX, pY, pZ, pQ, NULL);
   DebugInf("PyObject_CallFunctionObjArgs: end");
 
   size_t ret_size = PyBytes_Size(pValue);
@@ -112,6 +117,7 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
   // Clean up
   Py_DECREF(pModule);
   Py_DECREF(pName);
+  Py_DECREF(pWeights);
 
   // Finish the Python Interpreter
   Py_Finalize();

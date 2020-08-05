@@ -10,9 +10,10 @@ int main() {
   std::vector<VType> q = {1, 1, 1};
 
   const std::string module = "SCN_Vertex";
-  const std::string function = "SCN_Vertex";
+  const std::string function = "Test";
+  const std::string weights = "weights.pth";
 
-  auto vxt = WCPPYUTIL::SCN_Vertex(module, function, x, y, z, q);
+  auto vxt = WCPPYUTIL::SCN_Vertex(module, function, weights, x, y, z, q);
 
   return 0;
 }
