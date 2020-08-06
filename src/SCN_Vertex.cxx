@@ -16,14 +16,14 @@ void print(const std::vector<VType> &data) {
 }
 
 namespace WCPPYUTIL {
-#define FLOAT float
 std::vector<FLOAT> SCN_Vertex(const std::string &module,
                               const std::string &function,
                               const std::string &weights,
                               const std::vector<FLOAT> &x,
                               const std::vector<FLOAT> &y,
                               const std::vector<FLOAT> &z,
-                              const std::vector<FLOAT> &q) {
+                              const std::vector<FLOAT> &q,
+                              const std::string &dtype) {
   DebugInf("SCN_Vertex: start");
   DebugVar(module);
   DebugVar(function);
@@ -32,13 +32,14 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
   print<FLOAT>(y);
   print<FLOAT>(z);
   print<FLOAT>(q);
+  DebugVar(dtype);
 
   size_t npts = q.size();
   if (x.size() != npts || y.size() != npts || z.size() != npts) {
     throw std::runtime_error("input size unmatch");
   }
 
-  PyObject *pName, *pWeights, *pModule, *pDict, *pFunc, *pValue;
+  PyObject *pName, *pWeights, *pDtype, *pModule, *pDict, *pFunc, *pValue;
 
   // Initialize the Python Interpreter
   Py_Initialize();
@@ -48,6 +49,9 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
 
   // weight path, needs to dec ref
   pWeights = PyString_FromString(weights.c_str());
+
+  // weight path, needs to dec ref
+  pDtype = PyString_FromString(dtype.c_str());
 
   // Load the module object
   pModule = PyImport_Import(pName);
@@ -83,7 +87,7 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
 
   DebugInf("PyObject_CallFunctionObjArgs: start");
   // std::cout << std::endl;  // TODO: this is somehow needed to avoid seg fault
-  pValue = PyObject_CallFunctionObjArgs(pFunc, pWeights, pX, pY, pZ, pQ, NULL);
+  pValue = PyObject_CallFunctionObjArgs(pFunc, pWeights, pX, pY, pZ, pQ, pDtype, NULL);
   DebugInf("PyObject_CallFunctionObjArgs: end");
 
   size_t ret_size = PyBytes_Size(pValue);
@@ -118,6 +122,7 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
   Py_DECREF(pModule);
   Py_DECREF(pName);
   Py_DECREF(pWeights);
+  Py_DECREF(pDtype);
 
   // Finish the Python Interpreter
   Py_Finalize();
