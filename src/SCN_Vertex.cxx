@@ -16,14 +16,11 @@ void print(const std::vector<VType> &data) {
 }
 
 namespace WCPPYUTIL {
-std::vector<FLOAT> SCN_Vertex(const std::string &module,
-                              const std::string &function,
-                              const std::string &weights,
-                              const std::vector<FLOAT> &x,
-                              const std::vector<FLOAT> &y,
-                              const std::vector<FLOAT> &z,
-                              const std::vector<FLOAT> &q,
-                              const std::string &dtype) {
+std::vector<FLOAT> SCN_Vertex(
+    const std::string &module, const std::string &function,
+    const std::string &weights, const std::vector<FLOAT> &x,
+    const std::vector<FLOAT> &y, const std::vector<FLOAT> &z,
+    const std::vector<FLOAT> &q, const std::string &dtype) {
   DebugInf("SCN_Vertex: start");
   DebugVar(module);
   DebugVar(function);
@@ -87,7 +84,8 @@ std::vector<FLOAT> SCN_Vertex(const std::string &module,
 
   DebugInf("PyObject_CallFunctionObjArgs: start");
   // std::cout << std::endl;  // TODO: this is somehow needed to avoid seg fault
-  pValue = PyObject_CallFunctionObjArgs(pFunc, pWeights, pX, pY, pZ, pQ, pDtype, NULL);
+  pValue = PyObject_CallFunctionObjArgs(pFunc, pWeights, pX, pY, pZ, pQ, pDtype,
+                                        NULL);
   DebugInf("PyObject_CallFunctionObjArgs: end");
 
   size_t ret_size = PyBytes_Size(pValue);
