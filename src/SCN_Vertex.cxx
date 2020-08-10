@@ -1,6 +1,6 @@
 #include <Python.h>
 
-#include "WCPPYUTIL/SCN_Vertex.h"
+#include "WCPPyUtil/SCN_Vertex.h"
 
 #include <iostream>
 #include <vector>
@@ -16,7 +16,7 @@ void print(const std::vector<VType> &data)
     std::cout << std::endl;
 }
 
-namespace WCPPYUTIL {
+namespace WCPPyUtil {
     std::vector<FLOAT> SCN_Vertex(const std::string &module, const std::string &function, const std::string &weights,
                                   const std::vector< std::vector<FLOAT> > &input, const std::string &dtype, const bool verbose)
     {
@@ -139,4 +139,4 @@ namespace WCPPYUTIL {
 
         return ret;
     }
-}  // namespace WCPPYUTIL
+}  // namespace WCPPyUtil

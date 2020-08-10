@@ -2,6 +2,6 @@
 
 #define WCPPYUTIL_CONFIG_H
 
-namespace WCPPYUTIL {
+namespace WCPPyUtil {
     typedef float FLOAT;
 }

@@ -1,6 +1,6 @@
 #include <Python.h>
 
-#include "WCPPYUTIL/read_numpy.h"
+#include "WCPPyUtil/read_numpy.h"
 
 #include <iostream>
 #include <vector>
@@ -16,7 +16,7 @@ void print(const std::vector<VType> &data)
     std::cout << std::endl;
 }
 
-namespace WCPPYUTIL {
+namespace WCPPyUtil {
     std::vector<FLOAT> read_npz(const std::string &module, const std::string &function, const std::string &path,
                                 const std::string &key, const int col, const bool verbose)
     {
@@ -115,4 +115,4 @@ namespace WCPPYUTIL {
 
         return ret;
     }
-}  // namespace WCPPYUTIL
+}  // namespace WCPPyUtil
