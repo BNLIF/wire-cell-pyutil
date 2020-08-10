@@ -24,7 +24,7 @@ int main()
         "/lbne/u/hyu/lbne/uboone/wire-cell-pydata/"
         "scn_vtx/t48k-m16-l5-lr5d-res0.5-CP24.pth";
 
-    auto vxt = WCPPYUTIL::SCN_Vertex(module, function, weights, x, y, z, q);
+    auto vtx = WCPPYUTIL::SCN_Vertex(module, function, weights, {x, y, z, q});
 
     return 0;
 }

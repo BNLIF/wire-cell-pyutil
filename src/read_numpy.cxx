@@ -18,15 +18,19 @@ void print(const std::vector<VType> &data)
 
 namespace WCPPYUTIL {
     std::vector<FLOAT> read_npz(const std::string &module, const std::string &function, const std::string &path,
-                                const std::string &key, const int col)
+                                const std::string &key, const int col, const bool verbose)
     {
-        DebugInf("read_npz: start");
+        if (verbose) {
+            DebugInf("read_npz: start");
+        }
 
         PyObject *pModule, *pFunc;
 
         // Initialize the Python Interpreter
         Py_Initialize();
-        DebugInf("Py_Initialize: OK");
+        if (verbose) {
+            DebugInf("Py_Initialize: OK");
+        }
 
         // Build the name object
         auto pName = PyString_FromString(module.c_str());
@@ -34,25 +38,33 @@ namespace WCPPYUTIL {
         auto pKey = PyString_FromString(key.c_str());
         auto pCol = PyInt_FromLong((long) col);
         auto pDtype = PyString_FromString("float32");
-        DebugInf("pVar: OK");
+        if (verbose) {
+            DebugInf("pVar: OK");
+        }
 
         // Load the module object
         pModule = PyImport_Import(pName);
-        DebugInf("pModule: OK");
+        if (verbose) {
+            DebugInf("pModule: OK");
+        }
         if (!pModule) {
             throw std::runtime_error("import failed");
         }
 
         // pDict is a borrowed reference
         auto pDict = PyModule_GetDict(pModule);
-        DebugInf("pDict: OK");
+        if (verbose) {
+            DebugInf("pDict: OK");
+        }
         if (!pDict) {
             throw std::runtime_error("pDict failed");
         }
 
         // pFunc is also a borrowed reference
         pFunc = PyDict_GetItemString(pDict, function.c_str());
-        DebugInf("pFunc: OK");
+        if (verbose) {
+            DebugInf("pFunc: OK");
+        }
         if (!pFunc) {
             throw std::runtime_error("pFunc failed");
         }
@@ -61,20 +73,25 @@ namespace WCPPYUTIL {
             throw std::runtime_error("pFunc not callable");
         }
 
-        DebugInf("PyObject_CallFunctionObjArgs: start");
         auto pValue = PyObject_CallFunctionObjArgs(pFunc, pPath, pKey, pCol, pDtype, NULL);
-        DebugInf("PyObject_CallFunctionObjArgs: end");
+        if (verbose) {
+            DebugInf("PyObject_CallFunctionObjArgs: OK");
+        }
 
         size_t ret_size = PyBytes_Size(pValue);
-        DebugVar(ret_size);
+        if (verbose) {
+            DebugVar(ret_size);
+        }
         assert(ret_size % sizeof(FLOAT) == 0);
         std::vector<FLOAT> ret;
         ret.resize(ret_size / sizeof(FLOAT));
         memcpy((char *) ret.data(), (char *) PyBytes_AsString(pValue), ret_size);
 
         if (pValue != NULL) {
-            printf("Return of call: ");
-            print<FLOAT>(ret);
+            if (verbose) {
+                printf("Return of call: ");
+                print<FLOAT>(ret);
+            }
             Py_DECREF(pValue);
         }
         else {

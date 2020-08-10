@@ -9,6 +9,6 @@
 namespace WCPPYUTIL {
 
     std::vector<FLOAT> read_npz(const std::string &module, const std::string &function, const std::string &path,
-                                const std::string &key, const int col);
+                                const std::string &key, const int col, const bool verbose = false);
 }
 #endif

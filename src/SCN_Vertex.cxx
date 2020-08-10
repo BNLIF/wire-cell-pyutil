@@ -6,8 +6,8 @@
 #include <vector>
 #include <stdexcept>
 
-#define DebugVar(x) std::cout << "DebugVar: " << #x << ": " << x << std::endl
-#define DebugInf(x) std::cout << "DebugInf: " << x << std::endl
+#define DebugVar(x) //std::cout << "DebugVar: " << #x << ": " << x << std::endl
+#define DebugInf(x) //std::cout << "DebugInf: " << x << std::endl
 
 template <class VType>
 void print(const std::vector<VType> &data)
@@ -18,18 +18,22 @@ void print(const std::vector<VType> &data)
 
 namespace WCPPYUTIL {
     std::vector<FLOAT> SCN_Vertex(const std::string &module, const std::string &function, const std::string &weights,
-                                  const std::vector<FLOAT> &x, const std::vector<FLOAT> &y, const std::vector<FLOAT> &z,
-                                  const std::vector<FLOAT> &q, const std::string &dtype)
+                                  const std::vector< std::vector<FLOAT> > &input, const std::string &dtype, const bool verbose)
     {
-        DebugInf("SCN_Vertex: start");
-        DebugVar(module);
-        DebugVar(function);
-        DebugVar(weights);
-        print<FLOAT>(x);
-        print<FLOAT>(y);
-        print<FLOAT>(z);
-        print<FLOAT>(q);
-        DebugVar(dtype);
+        if (input.size() != 4) {
+            throw std::runtime_error("input.size() != 4");
+        }
+        auto x = input[0];
+        auto y = input[1];
+        auto z = input[2];
+        auto q = input[3];
+        if (verbose) {
+            DebugInf("SCN_Vertex: start");
+            DebugVar(module);
+            DebugVar(function);
+            DebugVar(weights);
+            DebugVar(dtype);
+        }
 
         size_t npts = q.size();
         if (x.size() != npts || y.size() != npts || z.size() != npts) {
@@ -82,13 +86,15 @@ namespace WCPPYUTIL {
             throw std::runtime_error("bad pData");
         }
 
-        DebugInf("PyObject_CallFunctionObjArgs: start");
-        // std::cout << std::endl;  // TODO: this is somehow needed to avoid seg fault
         pValue = PyObject_CallFunctionObjArgs(pFunc, pWeights, pX, pY, pZ, pQ, pDtype, NULL);
-        DebugInf("PyObject_CallFunctionObjArgs: end");
+        if (verbose) {
+            DebugInf("PyObject_CallFunctionObjArgs: OK");
+        }
 
         size_t ret_size = PyBytes_Size(pValue);
-        DebugVar(ret_size);
+        if (verbose) {
+            DebugVar(ret_size);
+        }
         assert(ret_size % sizeof(FLOAT) == 0);
         std::vector<FLOAT> ret;
         ret.resize(ret_size / sizeof(FLOAT));
@@ -108,8 +114,10 @@ namespace WCPPYUTIL {
         }
 
         if (pValue != NULL) {
-            printf("Return of call: ");
-            print<FLOAT>(ret);
+            if (verbose) {
+                printf("SCN_Vertex: Return of call: ");
+                print<FLOAT>(ret);
+            }
             Py_DECREF(pValue);
         }
         else {
