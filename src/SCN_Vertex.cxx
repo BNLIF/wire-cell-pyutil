@@ -6,8 +6,8 @@
 #include <vector>
 #include <stdexcept>
 
-#define DebugVar(x) //std::cout << "DebugVar: " << #x << ": " << x << std::endl
-#define DebugInf(x) //std::cout << "DebugInf: " << x << std::endl
+#define DebugVar(x) std::cout << "DebugVar: " << #x << ": " << x << std::endl
+#define DebugInf(x) std::cout << "DebugInf: " << x << std::endl
 
 template <class VType>
 void print(const std::vector<VType> &data)
