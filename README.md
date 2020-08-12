@@ -54,6 +54,7 @@ setup SparseConvNet 8422a6f -q e17:prof
 
 ### compile WCP
 
+Configure:
 ```bash
 env CC=gcc CXX=g++ FC=gfortran ./waf-tools/waf configure \
     --with-root="$ROOTSYS" \
@@ -67,6 +68,10 @@ env CC=gcc CXX=g++ FC=gfortran ./waf-tools/waf configure \
     --with-glpk="$GLPK_FQ_DIR/" --with-glpk-include="$GLPK_INC" --with-glpk-lib="$GLPK_LIB" \
     --with-python="$PYTHON_ROOT/" --with-python-include="$PYTHON_INCLUDE" --with-python-lib="$PYTHON_LIB" \
     --prefix="../opt"
+```
+Build and install:
+```bash
+./waf-tools/waf -p install
 ```
 
 ### envs for local build test
@@ -84,10 +89,14 @@ path-prepend $WCPPYINF_FQ_DIR PYTHONPATH
 
 WCPPYDATA_FQ_DIR=/uboone/app/users/yuhw/wire-cell-pydata
 ```
+### test python, C++ enviroment and communication
+```
+./build/pyutil/test_call_func test_funcs multiply 2 3
+```
 
-### test inputs
+### inputs for tests using `wire-cell-prod-nue`
 
-inputs for tests using `wire-cell-prod-nue`: [link](https://www.phy.bnl.gov/~yuhw/nue-cc-production/nue-dl-test/)
+[link](https://www.phy.bnl.gov/~yuhw/nue-cc-production/nue-dl-test/)
 
 
 
