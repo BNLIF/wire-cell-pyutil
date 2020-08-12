@@ -46,15 +46,18 @@ setup libtorch v1_0_1 -q e17:prof
 setup SparseConvNet 8422a6f -q e17:prof
 ```
 
-### obtain 3 git repositories
+### clone the WCP repo
 
-- wcp: https://github.com/BNLIF/wire-cell
-- wcp-pyinf: python scripts https://github.com/BNLIF/wire-cell-pyinf
-- wcp-pydata: model and test data https://github.com/BNLIF/wire-cell-pydata
+```bash
+git clone git@github.com:BNLIF/wire-cell.git
+cd wire-cell
+git submodule init
+git submodule update
+```
 
 ### compile WCP
 
-Configure:
+Configure (**change prefix as needed**)
 ```bash
 env CC=gcc CXX=g++ FC=gfortran ./waf-tools/waf configure \
     --with-root="$ROOTSYS" \
@@ -67,7 +70,7 @@ env CC=gcc CXX=g++ FC=gfortran ./waf-tools/waf configure \
     --with-eigen="$EIGEN_DIR" \
     --with-glpk="$GLPK_FQ_DIR/" --with-glpk-include="$GLPK_INC" --with-glpk-lib="$GLPK_LIB" \
     --with-python="$PYTHON_ROOT/" --with-python-include="$PYTHON_INCLUDE" --with-python-lib="$PYTHON_LIB" \
-    --prefix="../opt"
+    --prefix="/uboone/app/users/$USER/products/wire-cell/"
 ```
 Build and install:
 ```bash
@@ -77,17 +80,14 @@ Build and install:
 ### envs for local build test
 
 ```bash
-# local build of WCP
-WCP_FQ_DIR=/uboone/app/users/yuhw/products/wire-cell/
+# use local build of WCP
+# change WCP_FQ_DIR as needed
+WCP_FQ_DIR=/uboone/app/users/$USER/products/wire-cell/
 path-prepend $WCP_FQ_DIR/lib/ LD_LIBRARY_PATH
 path-prepend $WCP_FQ_DIR/lib64/ LD_LIBRARY_PATH
 path-prepend $WCP_FQ_DIR/bin/ PATH
 
-# add pyinf to PYTHONPATH
-WCPPYINF_FQ_DIR=/uboone/app/users/yuhw/wire-cell-pyinf
-path-prepend $WCPPYINF_FQ_DIR PYTHONPATH
-
-WCPPYDATA_FQ_DIR=/uboone/app/users/yuhw/wire-cell-pydata
+path-prepend $WCP_FQ_DIR/python PYTHONPATH
 ```
 ### test python, C++ enviroment and communication
 ```
@@ -97,6 +97,7 @@ WCPPYDATA_FQ_DIR=/uboone/app/users/yuhw/wire-cell-pydata
 ### inputs for tests using `wire-cell-prod-nue`
 
 [link](https://www.phy.bnl.gov/~yuhw/nue-cc-production/nue-dl-test/)
+
 
 
 
