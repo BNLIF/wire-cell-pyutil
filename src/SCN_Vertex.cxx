@@ -46,18 +46,19 @@ namespace WCPPyUtil {
         Py_Initialize();
 
         // Build the name object
-        pName = PyString_FromString(module.c_str());
+        pName = PyBytes_FromString(module.c_str());
 
         // weight path, needs to dec ref
-        pWeights = PyString_FromString(weights.c_str());
+        pWeights = PyBytes_FromString(weights.c_str());
 
         // weight path, needs to dec ref
-        pDtype = PyString_FromString(dtype.c_str());
+        pDtype = PyBytes_FromString(dtype.c_str());
 
         // Load the module object
         pModule = PyImport_Import(pName);
         if (!pModule) {
-            throw std::runtime_error("import failed");
+            PyErr_Print();
+            throw std::runtime_error("import failed!");
         }
 
         // pDict is a borrowed reference

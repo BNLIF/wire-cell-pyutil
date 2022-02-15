@@ -33,11 +33,11 @@ namespace WCPPyUtil {
         }
 
         // Build the name object
-        auto pName = PyString_FromString(module.c_str());
-        auto pPath = PyString_FromString(path.c_str());
-        auto pKey = PyString_FromString(key.c_str());
-        auto pCol = PyInt_FromLong((long) col);
-        auto pDtype = PyString_FromString("float32");
+        auto pName = PyBytes_FromString(module.c_str());
+        auto pPath = PyBytes_FromString(path.c_str());
+        auto pKey = PyBytes_FromString(key.c_str());
+        auto pCol = PyLong_FromLong((long) col);
+        auto pDtype = PyBytes_FromString("float32");
         if (verbose) {
             DebugInf("pVar: OK");
         }
