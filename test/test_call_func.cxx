@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     Py_Initialize();
 
     // Build the name object
-    pName = PyString_FromString(argv[1]);
+    pName = PyUnicode_FromString(argv[1]);
 
     // Load the module object
     pModule = PyImport_Import(pName);
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         if (argc > 3) {
             auto pArgs = PyTuple_New(argc - 3);
             for (int i = 0; i < argc - 3; i++) {
-                pValue = PyInt_FromLong(atoi(argv[i + 3]));
+                pValue = PyLong_FromLong(atoi(argv[i + 3]));
                 if (!pValue) {
                     PyErr_Print();
                     return 1;
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         }
 
         if (pValue != NULL) {
-            printf("Return of call : %d\n", PyInt_AsLong(pValue));
+            printf("Return of call : %d\n", PyLong_AsLong(pValue));
             Py_DECREF(pValue);
         }
         else {

@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     Py_Initialize();
 
     // Build the name object
-    pName = PyString_FromString(argv[1]);
+    pName = PyUnicode_FromString(argv[1]);
 
     // Load the module object
     pModule = PyImport_Import(pName);
