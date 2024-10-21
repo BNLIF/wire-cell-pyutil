@@ -46,13 +46,24 @@ namespace WCPPyUtil {
         Py_Initialize();
 
         // Build the name object
-        pName = PyBytes_FromString(module.c_str());
+        #if PY_MAJOR_VERSION == 3
+            pName = PyUnicode_FromString(module.c_str());
+            // weight path, needs to dec ref
+            pWeights = PyUnicode_FromString(weights.c_str());
 
-        // weight path, needs to dec ref
-        pWeights = PyBytes_FromString(weights.c_str());
+            // weight path, needs to dec ref
+            pDtype = PyUnicode_FromString(dtype.c_str());
+        #else
+            pName = PyBytes_FromString(module.c_str());
+            // weight path, needs to dec ref
+            pWeights = PyBytes_FromString(weights.c_str());
 
-        // weight path, needs to dec ref
-        pDtype = PyBytes_FromString(dtype.c_str());
+            // weight path, needs to dec ref
+            pDtype = PyBytes_FromString(dtype.c_str());
+        #endif
+        //pName = PyBytes_FromString(module.c_str());
+
+        
 
         // Load the module object
         pModule = PyImport_Import(pName);
