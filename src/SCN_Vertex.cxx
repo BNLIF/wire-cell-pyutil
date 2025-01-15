@@ -33,6 +33,7 @@ namespace WCPPyUtil {
             DebugVar(function);
             DebugVar(weights);
             DebugVar(dtype);
+            DebugVar(PY_MAJOR_VERSION);
         }
 
         size_t npts = q.size();
